@@ -120,7 +120,7 @@ void setup() {
 void loop() {
   if (calibration_done == true) {
     sendNTPpacket(timeServer); //NTPパケット送信
-    delay(500);  //1秒待機
+    delay(1000);  //1秒待機
     if (Udp.parsePacket()) {
       //UDPパケット読み込み
       Udp.read(packetBuffer, NTP_PACKET_SIZE); // read the packet into the buffer
@@ -150,12 +150,11 @@ void loop() {
         Serial.print('0');
       }
     Serial.println(epoch % 60); // 秒
+    Serial.println(epoch);
   }
     
   Ethernet.maintain();
   }
-
-  Serial.println(epoch);
   
   //temp[MEAN-1]が0でない場合、キャリブレーションは完了していると判定しフラグを立てる
   if (temp[MEAN-1] != 0) {
@@ -184,32 +183,25 @@ void loop() {
 
   //キャリブレーションが未完了の場合、以降の処理をスキップする
   if (calibration_done == true) {
-  //  if (cnt % 10 == 0) {        //送信頻度を10回に1回に制限する（調整可）
-  //    Serial.print("Degree(C):   ");
-  //    Serial.println(celsius);
-      //Serial.print("temp: ");
-      //Serial.println(get_temp());
-      
-      //root["status"][0]["time"] = String(epoch) + String("000");
-      //root["status"][0]["values"][0]["value"] = String(celsius);   //JSONに温度をセット
+    //Serial.print("Degree(C):   ");
+    //Serial.println(celsius);
+    //Serial.print("temp: ");
+    //Serial.println(get_temp());
 
-      String payload = json1 + USERNAME + json2 + String(epoch) + "000" + json3 + String(celsius) + json4;                                            //payloadを初期化
-      //root.printTo(payload);                                          //JSONの内容をpayloadに吐き出し
+    String payload = json1 + USERNAME + json2 + String(epoch) + "000" + json3 + String(celsius) + json4;                                            //payloadを初期化
       
-      int payload_length = payload.length() + 1;                      //payloadの長さ＋１
-      //Serial.print("payload_length: ");
-      //Serial.println(payload_length);
-      Serial.println(payload);
-      char payload_data[payload_length];                              //char型の配列を初期化
-      payload.toCharArray(payload_data, payload_length);              //payloadをcharArrayに変換
-      client.publish("Notify", payload_data);                         //MQTTブローカーへメッセージ送信  
+    int payload_length = payload.length() + 1;                      //payloadの長さ＋１
+    //Serial.print("payload_length: ");
+    //Serial.println(payload_length);
+    Serial.println(payload);
+    char payload_data[payload_length];                              //char型の配列を初期化
+    payload.toCharArray(payload_data, payload_length);              //payloadをcharArrayに変換
+    client.publish("Notify", payload_data);                         //MQTTブローカーへメッセージ送信  
+    delay(1000);                                                    //1秒待機  
   } else {
-    Serial.println("wa");
+    Serial.println("wait...");
   }
 
-  delay(1000);                                                    //1秒待機
-  //epoch++;                                                  //時刻も1秒加算
-  
   client.loop();                                                  
 }
 
