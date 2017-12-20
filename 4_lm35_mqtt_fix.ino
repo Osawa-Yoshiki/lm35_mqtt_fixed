@@ -1,8 +1,8 @@
-#define PIN1 A0     //温度センサー
-#define PIN2 5      //モーター用その①
-#define PIN3 6      //モーター用その②
-#define PWM1 7      //モーター用その③
-#define PIN4 2      //LED用
+#define TEMP_PIN A0     //温度センサー
+#define M_PIN2 5      //モーター用その①
+#define M_PIN3 6      //モーター用その②
+#define M_PWM1 7      //モーター用その③
+#define M_PIN4 2      //LED用
 #define MEAN 100    //移動平均を出すまでのサンプリング数を指定します。
 #define USERNAME "user20"
 
@@ -29,7 +29,7 @@ boolean calibration_done = false;
 unsigned long epoch;
 
 //MACアドレスとMQTTブローカー設定
-byte mac[]    = { 0xDE, 0x0FF, 0xFF, 0x01, 0x01, 0x20 };    // 自身のEtherernet Sheild の MACアドレス に変更
+byte mac[]    = { 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 };    // 自身のEtherernet Sheild の MACアドレス に変更
 byte server[]   = { 123, 123, 123, 123 };                   // Mosquittoが実行されているPCのIPアドレス に変更
 
 //送信用JSONの初期設定
@@ -48,17 +48,17 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println("message arrived!");
 
   //LEDをオンにする
-  digitalWrite(PIN4, HIGH);
+  digitalWrite(M_PIN4, HIGH);
 
   //モーターをオンにする
-  digitalWrite(PIN2, HIGH);
-  digitalWrite(PIN3, LOW);
-  analogWrite(PWM1, 250);
+  digitalWrite(M_PIN2, HIGH);
+  digitalWrite(M_PIN3, LOW);
+  analogWrite(M_PWM1, 250);
 
   //2秒待機してオフにする。
   delay(2000);
-  digitalWrite(PIN4, LOW);
-  analogWrite(PWM1, 0);
+  digitalWrite(M_PIN4, LOW);
+  analogWrite(M_PWM1, 0);
 }
 
 EthernetClient ethClient;           //イーサネットクライアントの初期化
@@ -66,7 +66,7 @@ PubSubClient client(ethClient);     //MQTTクライアントの初期化
 
 //温度センサーの値を摂氏で取得
 float get_temp() {
-  int analogValue = analogRead(PIN1);
+  int analogValue = analogRead(TEMP_PIN);
   float temp = ((analogValue * 5) / 1024.0) * 100;
   return temp;
 }
@@ -101,9 +101,9 @@ void setup() {
   //MQTT送信用ユーザー名(JSON)
   //root["name"] = USERNAME;
 
-  pinMode(PIN2, OUTPUT);
-  pinMode(PIN3, OUTPUT);
-  pinMode(PWM1, OUTPUT);
+  pinMode(M_PIN2, OUTPUT);
+  pinMode(M_PIN3, OUTPUT);
+  pinMode(M_PWM1, OUTPUT);
 
   client.setServer(server, 1883);
   client.setCallback(callback);
