@@ -109,7 +109,7 @@ void setup() {
   client.setCallback(callback);
 
   Ethernet.begin(mac);                            //イーサネットの開始
-  if (client.connect("arduinoClient")) {           //クライアント名"arduinoClient"で接続。
+  if (client.connect(USERNAME)) {           //クライアント名"arduinoClient"で接続。
     client.publish("outTopic", "hello, mqtt!");    //outTopicに対し、"hello, mqtt!"を送信
     client.subscribe("Fab/#");                     //"Fab/#"でサブスクライブを開始
   }
