@@ -1,7 +1,7 @@
 #define TEMP_PIN A0     //温度センサー
 #define M_PIN2 5      //モーター用その①
 #define M_PIN3 6      //モーター用その②
-#define M_PWM1 7      //モーター用その③
+#define M_PWM1 9      //モーター用その③
 #define M_PIN4 2      //LED用
 #define MEAN 100    //移動平均を出すまでのサンプリング数を指定します。
 #define USERNAME "user20"
