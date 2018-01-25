@@ -29,7 +29,7 @@ boolean calibration_done = false;
 unsigned long epoch;
 
 //MACアドレスとMQTTブローカー設定
-byte mac[]    = { 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 };    // 自身のEtherernet Sheild の MACアドレス に変更
+byte mac[]    = { 0xFE, 0xFF, 0xAA, 0x01, 0x01, 0xYY };    // 自身のEtherernet Sheild の MACアドレス に変更
 byte server[]   = { 123, 123, 123, 123 };                   // Mosquittoが実行されているPCのIPアドレス に変更
 
 //送信用JSONの初期設定
