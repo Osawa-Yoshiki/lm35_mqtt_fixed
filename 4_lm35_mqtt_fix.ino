@@ -3,7 +3,7 @@
 #define M_PIN3 6      //モーター用その②
 #define M_PWM1 9      //モーター用その③
 #define M_PIN4 2      //LED用
-#define MEAN 100    //移動平均を出すまでのサンプリング数を指定します。
+#define MEAN 50    //移動平均を出すまでのサンプリング数を指定します。
 #define USERNAME "user20"
 
 //#include <ArduinoJson.h>
